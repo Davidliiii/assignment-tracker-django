@@ -1,0 +1,28 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Courses{% endblock %}
+
+{% block content %}
+<h1>Courses</h1>
+
+<div class="top-links">
+    <a href="{% url 'course_create' %}">Add New Course</a>
+    <a href="{% url 'assignment_list' %}">Back to Assignments</a>
+</div>
+
+<ul>
+    {% for course in courses %}
+        <li>
+            <strong>{{ course.course_code }}</strong> - {{ course.course_name }}
+            {% if course.instructor %}
+                <br>Instructor: {{ course.instructor }}
+            {% endif %}
+            <br><br>
+            <a href="{% url 'course_update' course.pk %}">Edit</a>
+            <a href="{% url 'course_delete' course.pk %}">Delete</a>
+        </li>
+    {% empty %}
+        <li>No courses found.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

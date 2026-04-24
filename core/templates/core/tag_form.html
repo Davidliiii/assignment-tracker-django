@@ -1,0 +1,15 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Tag Form{% endblock %}
+
+{% block content %}
+<h1>Tag Form</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save Tag</button>
+</form>
+
+<p><a href="{% url 'tag_list' %}">Back to Tags</a></p>
+{% endblock %}

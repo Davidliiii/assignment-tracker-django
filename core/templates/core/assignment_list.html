@@ -1,0 +1,128 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Assignments{% endblock %}
+
+{% block content %}
+<h1>Assignment Tracker Dashboard</h1>
+
+<div class="top-links">
+    <a href="{% url 'assignment_create' %}">Add New Assignment</a>
+    <a href="{% url 'course_list' %}">View Courses</a>
+    <a href="{% url 'tag_list' %}">View Tags</a>
+</div>
+
+<div class="dashboard-grid">
+    <div class="dashboard-card">
+        <h3>Total Assignments</h3>
+        <p>{{ total_assignments }}</p>
+    </div>
+    <div class="dashboard-card">
+        <h3>Completed</h3>
+        <p>{{ completed_assignments }}</p>
+    </div>
+    <div class="dashboard-card">
+        <h3>In Progress</h3>
+        <p>{{ in_progress_assignments }}</p>
+    </div>
+    <div class="dashboard-card">
+        <h3>Not Started</h3>
+        <p>{{ not_started_assignments }}</p>
+    </div>
+</div>
+
+<div class="section-box">
+    <h2>Upcoming Assignments</h2>
+    <ul>
+        {% for assignment in upcoming_assignments %}
+            <li>
+                <strong>{{ assignment.title }}</strong><br>
+                Course: {{ assignment.course }}<br>
+                Due: {{ assignment.due_date }}<br>
+                Status: {{ assignment.status }}
+            </li>
+        {% empty %}
+            <li>No upcoming assignments.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="section-box">
+    <h2>Overdue Assignments</h2>
+    <ul>
+        {% for assignment in overdue_assignments %}
+            <li>
+                <strong>{{ assignment.title }}</strong><br>
+                Course: {{ assignment.course }}<br>
+                Due: {{ assignment.due_date }}<br>
+                Status: {{ assignment.status }}
+            </li>
+        {% empty %}
+            <li>No overdue assignments.</li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="filter-box">
+    <h2>Search and Filter Assignments</h2>
+    <form method="get">
+        <label for="q">Search by Title</label>
+        <input type="text" name="q" id="q" value="{{ selected_query }}">
+
+        <label for="status">Filter by Status</label>
+        <select name="status" id="status">
+            <option value="">All Statuses</option>
+            <option value="Not Started" {% if selected_status == "Not Started" %}selected{% endif %}>Not Started</option>
+            <option value="In Progress" {% if selected_status == "In Progress" %}selected{% endif %}>In Progress</option>
+            <option value="Completed" {% if selected_status == "Completed" %}selected{% endif %}>Completed</option>
+        </select>
+
+        <label for="course">Filter by Course</label>
+        <select name="course" id="course">
+            <option value="">All Courses</option>
+            {% for course in courses %}
+                <option value="{{ course.id }}" {% if selected_course == course.id|stringformat:"s" %}selected{% endif %}>
+                    {{ course.course_code }} - {{ course.course_name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label for="tag">Filter by Tag</label>
+        <select name="tag" id="tag">
+            <option value="">All Tags</option>
+            {% for tag in tags %}
+                <option value="{{ tag.id }}" {% if selected_tag == tag.id|stringformat:"s" %}selected{% endif %}>
+                    {{ tag.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Apply Filters</button>
+        <div class="inline-links">
+            <a href="{% url 'assignment_list' %}">Clear Filters</a>
+        </div>
+    </form>
+</div>
+
+<h2>All Assignments</h2>
+<ul>
+    {% for assignment in assignments %}
+        <li>
+            <strong>{{ assignment.title }}</strong><br>
+            Course: {{ assignment.course }}<br>
+            Due: {{ assignment.due_date }}<br>
+            Status: {{ assignment.status }}<br>
+            Tags:
+            {% for tag in assignment.tags.all %}
+                {{ tag.name }}
+            {% empty %}
+                No tags
+            {% endfor %}
+            <br><br>
+            <a href="{% url 'assignment_update' assignment.pk %}">Edit</a>
+            <a href="{% url 'assignment_delete' assignment.pk %}">Delete</a>
+        </li>
+    {% empty %}
+        <li>No assignments found.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

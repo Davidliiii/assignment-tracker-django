@@ -1,0 +1,25 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Tags{% endblock %}
+
+{% block content %}
+<h1>Tags</h1>
+
+<div class="top-links">
+    <a href="{% url 'tag_create' %}">Add New Tag</a>
+    <a href="{% url 'assignment_list' %}">Back to Assignments</a>
+</div>
+
+<ul>
+    {% for tag in tags %}
+        <li>
+            <strong>{{ tag.name }}</strong>
+            <br><br>
+            <a href="{% url 'tag_update' tag.pk %}">Edit</a>
+            <a href="{% url 'tag_delete' tag.pk %}">Delete</a>
+        </li>
+    {% empty %}
+        <li>No tags found.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

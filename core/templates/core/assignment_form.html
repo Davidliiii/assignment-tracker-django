@@ -1,0 +1,15 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Assignment Form{% endblock %}
+
+{% block content %}
+<h1>Assignment Form</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save Assignment</button>
+</form>
+
+<p><a href="{% url 'assignment_list' %}">Back to Assignment List</a></p>
+{% endblock %}
